@@ -1,0 +1,1 @@
+@import '~bootstrap/scss/bootstrap';// components@import './searchbar';@import './_loader.scss';body {  background: $dark;}main {  display: flex;  flex-direction: column;  justify-content: flex-start;  align-items: center;}

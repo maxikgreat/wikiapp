@@ -1,0 +1,1 @@
+import {VFC} from 'react';export const Loader: VFC = () => (	<div className="lds-ring mt-3">		<div/>		<div/>		<div/>		<div/>	</div>);

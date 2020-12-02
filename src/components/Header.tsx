@@ -1,0 +1,1 @@
+import {VFC} from 'react';import Logo from '../assets/images/wiki.png';export const Header: VFC = () => (	<nav className="navbar navbar-light bg-success">		<div className="container-fluid">			<a className="navbar-brand" href="#">				<h3 className="d-inline-block text-white mb-0">WikiApp</h3>			</a>		</div>	</nav>)
