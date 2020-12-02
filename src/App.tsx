@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import {render} from 'react-dom';
 import axios from 'axios';
 
 import {Header, Loader, Tips, Searchbar} from './components';
@@ -13,7 +12,7 @@ export interface Tip {
 
 export interface ActiveTip {
   tip: Tip | null,
-  data: string,
+  data: any,
   loading: boolean
 }
 
@@ -29,11 +28,14 @@ function App() {
   });
   
   useEffect(() => {
-    if (!search) return setTips([]);
+    if (!search) {
+      setActiveTip(prevState => ({tip: null, data: '', loading: false}))
+      return setTips([]);
+    }
     setLoading(true);
     axios.get(`${baseUrl}?origin=*&action=query&list=search&format=json&srsearch=${search}`)
       .then(({data}) => setTips(() => data.query.search.map((item: Tip) => ({pageid: item.pageid, title: item.title}))))
-      .catch(e => setError(e))
+      .catch(error => setError(error))
       .finally(() => setLoading(false))
   }, [search, setSearch]);
   
@@ -42,7 +44,7 @@ function App() {
     setActiveTip(prevState => ({...prevState, loading: true}))
     axios.get(`${baseUrl}?origin=*&page=${activeTip.tip.title}&action=parse&format=json`)
       .then(({data}) => setActiveTip(prevState => ({...prevState, data: data.parse})))
-      .catch(error => console.log('error', error))
+      .catch(error => setError(error))
       .finally(() => setActiveTip(prevState => ({...prevState, loading: false})))
   }, [activeTip.tip, setActiveTip]);
   
@@ -54,6 +56,7 @@ function App() {
           search={search}
           setSearch={setSearch}
         />
+        {error && <h1>Error occurred!</h1>}
         {loading && <Loader />}
         {!loading && tips.length > 0 && (
           <Tips
